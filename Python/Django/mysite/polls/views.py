@@ -4,6 +4,8 @@ from django.shortcuts import redirect
 
 from .models import Question
 from .models import Choice
+from .forms import MyForm
+from .forms import VoteForm
 
 
 def index(request):
@@ -35,4 +37,23 @@ def results(request, pk):
     obj = get_object_or_404(Question, pk=pk)
     return render(request, 'polls/results.html', {
         'question': obj,
-    })    
+    })
+
+def form_test(request):
+    if request.method == "POST":
+        form = MyForm(data=request.POST)
+        if form.is_valid():
+            pass
+    else:
+        form = MyForm()
+    return render(request, 'polls/form.html', {
+        'form': form,
+    })
+
+def detail(request, pk):
+    obj = get_object_or_404(Question, pk=pk)
+    form = VoteForm(question=obj)
+    return render(request, 'polls/detail.html',{
+        'form': form,
+        'question': obj,
+    })
